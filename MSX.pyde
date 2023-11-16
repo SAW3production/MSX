@@ -23,6 +23,8 @@ def setup():
 def draw():
     global models, theta, mind_offsets,timer
     timer+=1.0/30.0
+    r = 10
+    c = 1
     print(timer)
     colorMode(HSB)
     background(0)
@@ -40,6 +42,12 @@ def draw():
     fill(200,128)
     noStroke()
     models[1].render()
+    
+    theta += 0.08
+    noStroke()
+    fill(255)
+              
+            
     popMatrix()
     
     #2 head
@@ -64,7 +72,7 @@ def draw():
         angle = theta;
         
         for x in range(int(models[1].pos.x),int(models[2].pos.x)+100,20):    
-            y = map(sin(angle), -0.5, 0.5, 200,250) + mind_offsets[m]
+            y = map(sin(angle), -0.5, 0.5, 220,250) + mind_offsets[m]
             transparency = map(cos(angle),0,1,0,255)
             z = map(sin(angle),0,20,0,500)
             pushMatrix()
@@ -74,7 +82,7 @@ def draw():
             popMatrix()
               
             
-            angle += mind_offsets[m]/0.01 +0.1;    
+            angle += mind_offsets[m]*0.01 +0.1;    
             
     
 class Model:
