@@ -1,7 +1,7 @@
 models = []
 mind_offsets = []
 theta = 0
-timer = 1000
+timer = 0.0
 def setup():
     frameRate(30)
     global models,mind_offsets
@@ -47,22 +47,21 @@ def draw():
     theta += 0.08
     noStroke()
     fill(255)
-    for m in range(1):
+    for m in range(5):
         angle = theta;
         
-        for x in range(int(models[1].pos.x),int(models[2].pos.x),20):    
-            y = map(sin(angle), -1, 1, 0,500) + mind_offsets[m]
+        for x in range(int(models[1].pos.x),int(models[2].pos.x)+100,20):    
+            y = map(sin(angle), -0.5, 0.5, 200,250) + mind_offsets[m]
+            transparency = map(cos(angle),0,1,0,255)
             z = map(sin(angle),0,20,0,500)
             pushMatrix()
             translate(x,y,z)
-            fill(360,100,100)   
+            fill(360,100,100,transparency)   
             sphere(10)
             popMatrix()
-            cube = Cube(x,y,z,1,255)
-            cube.render()
               
             
-            angle += 0.1;    
+            angle += mind_offsets[m]/0.01 +0.001;    
             
     
 class Model:
@@ -97,7 +96,7 @@ class Cube:
             translate(self.pos.x, self.pos.y + self.y, self.pos.z)
             scale(self.s)
             
-            stroke((self.h + mouseX) % 256, 255, 255)
+            stroke(self.h, 255, 255)
             noFill()
             box(10)
             popMatrix()
