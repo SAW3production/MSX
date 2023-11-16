@@ -1,7 +1,7 @@
 models = []
 mind_offsets = []
 theta = 0
-timer = 0.1
+timer = 1000
 def setup():
     frameRate(30)
     global models,mind_offsets
