@@ -1,10 +1,11 @@
 models = []
+leaves = []
 mind_offsets = []
 theta = 0
 timer = 0.0
 def setup():
     frameRate(30)
-    global models,mind_offsets
+    global models,mind_offsets,leaves
     size(1920, 1080, P3D)
     colorMode(HSB,360,100,100,255)
        
@@ -14,14 +15,18 @@ def setup():
     liberty_model = Model("LibertStatue.obj", 1450, 550, 20, 30, random(256),PI,PI)
     models.append(sakura_model)
     models.append(head_model_1)
-    models.append(head_model_2)
     models.append(liberty_model)
+    models.append(head_model_2)
     
     for i in range(6):
         mind_offsets.append(random(0,250))
+    
+    
+    for _ in range(100):
+        leaves.append(Leaf())
                
 def draw():
-    global models, theta, mind_offsets,timer
+    global models, theta, mind_offsets,timer,leaves
     timer+=1.0/30.0
     r = 10
     c = 1
@@ -42,22 +47,20 @@ def draw():
     fill(200,128)
     noStroke()
     models[1].render()
-    
-    theta += 0.08
-    noStroke()
-    fill(255)
-              
-            
+    translate(400,300)
+    for leaf in leaves:
+        leaf.update()
+        leaf.display()
     popMatrix()
     
     #2 head
     pushMatrix()
     
     rotateY(sin(timer-10.5)*0.01)
-    noFill()
-    stroke(255,128)
-    models[2].render()
     fill(197,43.3,67.1,255)
+    noStroke()
+    models[2].render()
+    fill(200,128)
     noStroke()
     models[3].render()
     popMatrix()
@@ -71,18 +74,18 @@ def draw():
     for m in range(5):
         angle = theta;
         
-        for x in range(int(models[1].pos.x),int(models[2].pos.x)+100,20):    
+        for x in range(int(models[1].pos.x),int(models[2].pos.x)+50,20):    
             y = map(sin(angle), -0.5, 0.5, 220,250) + mind_offsets[m]
             transparency = map(cos(angle),0,1,0,255)
             z = map(sin(angle),0,20,0,500)
             pushMatrix()
             translate(x,y,z)
             fill(200,255,255,transparency)   
-            sphere(10)
+            sphere(random(5,10))
             popMatrix()
               
             
-            angle += mind_offsets[m]*0.01 +0.1;    
+            angle += mind_offsets[m+1]*0.01 +0.5;    
             
     
 class Model:
@@ -122,6 +125,33 @@ class Cube:
             box(10)
             popMatrix()
             self.y+=1
+            
+class Leaf:
+    def __init__(self):
+        theta = random(0, TWO_PI)
+        phi = random(0, PI)
+        radius = 100
+        self.position = PVector(
+            radius * sin(phi) * cos(theta),
+            radius * sin(phi) * sin(theta),
+            radius * cos(phi)
+        )
+        self.velocity = PVector(0, 0, random(1, 5))
+
+    def update(self):
+        self.position.add(self.velocity)
+        if self.position.z > 200:
+            self.position.z = -200
+
+    def display(self):
+        fill(348,28,100,255)
+        noStroke()
+        pushMatrix()
+        translate(self.position.x, self.position.y, self.position.z)
+        rotateX(frameCount * 0.01)
+        rotateZ(frameCount * 0.02)
+        circle(0,0,5)
+        popMatrix()
             
                     
         
