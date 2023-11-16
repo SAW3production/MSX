@@ -11,13 +11,13 @@ def setup():
     sakura_model = Model("sakura.obj", 425, 450, 0, 30, random(256),PI,0)
     head_model_1 = Model("Head.obj", 400, 700, 0, 10, random(256),PI/2,-PI+PI/4+PI/8)
     head_model_2 = Model("Head.obj", 1500, 800, 20, 10, random(256),PI/2,PI/2)
-    liberty_model = Model("LibertStatue.obj", 1500, 650, 20, 30, random(256),PI,PI)
+    liberty_model = Model("LibertStatue.obj", 1450, 550, 20, 30, random(256),PI,PI)
     models.append(sakura_model)
     models.append(head_model_1)
     models.append(head_model_2)
     models.append(liberty_model)
     
-    for i in range(20):
+    for i in range(6):
         mind_offsets.append(random(0,250))
                
 def draw():
@@ -28,6 +28,10 @@ def draw():
     background(0)
     lights()
     strokeWeight(2)
+    
+    scale(min(timer*0.1+0.1,1))
+    
+    #1 head
     pushMatrix()
     rotateY(sin(timer)*0.15)
     fill(348,28,100,255)
@@ -37,8 +41,11 @@ def draw():
     noStroke()
     models[1].render()
     popMatrix()
+    
+    #2 head
     pushMatrix()
-    rotateX(sin(timer-10.5)*0.10)
+    
+    rotateY(sin(timer-10.5)*0.01)
     noFill()
     stroke(255,128)
     models[2].render()
@@ -53,7 +60,7 @@ def draw():
     theta += 0.08
     noStroke()
     fill(255)
-    for m in range(2):
+    for m in range(5):
         angle = theta;
         
         for x in range(int(models[1].pos.x),int(models[2].pos.x)+100,20):    
@@ -67,7 +74,7 @@ def draw():
             popMatrix()
               
             
-            angle += mind_offsets[m]/0.01 +0.01;    
+            angle += mind_offsets[m]/0.01 +0.1;    
             
     
 class Model:
