@@ -1,7 +1,9 @@
 models = []
 mind_offsets = []
 theta = 0
+timer = 0.0
 def setup():
+    frameRate(30)
     global models,mind_offsets
     size(1920, 1080, P3D)
     colorMode(HSB,360,100,100,255)
@@ -19,7 +21,12 @@ def setup():
         mind_offsets.append(random(0,250))
                
 def draw():
-    global models, theta, mind_offsets
+    if(timer>=5):
+        background(0)
+        return
+    global models, theta, mind_offsets,timer
+    timer+=1.0/30.0
+    print(timer)
     colorMode(HSB)
     background(0)
     lights()
