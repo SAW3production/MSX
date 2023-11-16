@@ -21,9 +21,6 @@ def setup():
         mind_offsets.append(random(0,250))
                
 def draw():
-    if(timer>=5):
-        background(0)
-        return
     global models, theta, mind_offsets,timer
     timer+=1.0/30.0
     print(timer)
@@ -105,4 +102,6 @@ class Cube:
             box(10)
             popMatrix()
             self.y+=1
+            
+                    
         
