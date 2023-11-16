@@ -33,7 +33,7 @@ def draw():
     
     #1 head
     pushMatrix()
-    rotateY(sin(timer)*0.15)
+    rotateY(sin(timer)*0.1)
     fill(348,28,100,255)
     noStroke()
     models[0].render()
