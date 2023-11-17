@@ -3,9 +3,11 @@ leaves = []
 mind_offsets = []
 theta = 0
 timer = 0.0
+characters = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!@#$%^&*()-=_+[]{}|;':,.<>?/ "
+matrix_rain = []
 def setup():
     frameRate(30)
-    global models,mind_offsets,leaves
+    global models,mind_offsets,leaves,characters,matrix_rain
     size(1920, 1080, P3D)
     colorMode(HSB,360,100,100,255)
        
@@ -18,6 +20,12 @@ def setup():
     models.append(liberty_model)
     models.append(head_model_2)
     
+    for i in range(-200, width+400, 20):
+        column = []
+        for j in range(0, height*2, 20):
+            column.append(MatrixChar(i, j))
+        matrix_rain.append(column)
+    
     for i in range(6):
         mind_offsets.append(random(0,250))
     
@@ -26,13 +34,20 @@ def setup():
         leaves.append(Leaf())
                
 def draw():
-    global models, theta, mind_offsets,timer,leaves
+    global models, theta, mind_offsets,timer,leaves,characters,matrix_rain
     timer+=1.0/30.0
     r = 10
     c = 1
     print(timer)
     colorMode(HSB)
     background(0)
+    pushMatrix()
+    translate(0,0,-100)
+    for column in matrix_rain:
+        for matrix_char in column:
+            matrix_char.display()
+            matrix_char.fall()
+    popMatrix()
     lights()
     strokeWeight(2)
     
@@ -148,10 +163,25 @@ class Leaf:
         noStroke()
         pushMatrix()
         translate(self.position.x, self.position.y, self.position.z)
-        rotateX(frameCount * 0.01)
-        rotateZ(frameCount * 0.02)
+        
         circle(0,0,5)
         popMatrix()
             
-                    
+class MatrixChar:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+        self.speed = random(1, 5)
+        self.value = characters[int(random(len(characters)))]
+
+    def fall(self):
+        self.y = (self.y + self.speed) % height
+        if random(1) < 0.01: 
+            self.value = characters[int(random(len(characters)))]
+
+    def display(self):
+        fill(255, 255, 30,128)
+        noStroke()
+        textSize(20)
+        text(self.value, self.x, self.y)                
         
