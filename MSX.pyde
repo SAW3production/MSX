@@ -1,5 +1,6 @@
 models = []
 leaves = []
+stars = []
 mind_offsets = []
 theta = 0
 timer = 0.0
@@ -30,11 +31,14 @@ def setup():
         mind_offsets.append(random(0,250))
     
     
-    for _ in range(100):
+    for _ in range(200):
         leaves.append(Leaf())
+        
+    for _ in range(100):
+        stars.append(Star())
                
 def draw():
-    global models, theta, mind_offsets,timer,leaves,characters,matrix_rain
+    global models, theta, mind_offsets,timer,leaves,characters,matrix_rain,stars
     timer+=1.0/30.0
     r = 10
     c = 1
@@ -78,6 +82,11 @@ def draw():
     fill(200,128)
     noStroke()
     models[3].render()
+    translate(1450,450)
+    for star in stars:
+        star.update()
+        star.display()
+    
     popMatrix()
     
     
@@ -123,24 +132,7 @@ class Model:
         shape(self.sh)
         popMatrix()
         
-class Cube:
-    def __init__(self,x, y, z, s, h):
-        self.pos = PVector(x, y, z)
-        self.s = s
-        self.h = h
-        self.y = 0
-    def render(self):
-        while(self.y<=100):
-            pushMatrix()
-            translate(self.pos.x, self.pos.y + self.y, self.pos.z)
-            scale(self.s)
-            
-            stroke(self.h, 255, 255)
-            noFill()
-            box(10)
-            popMatrix()
-            self.y+=1
-            
+           
 class Leaf:
     def __init__(self):
         theta = random(0, TWO_PI)
@@ -166,7 +158,46 @@ class Leaf:
         
         circle(0,0,5)
         popMatrix()
-            
+        
+class Star:
+    def __init__(self):
+        theta = random(0, TWO_PI)
+        phi = random(0, PI)
+        radius = 100
+        self.position = PVector(
+            radius * sin(phi) * cos(theta),
+            radius * sin(phi) * sin(theta),
+            radius * cos(phi)
+        )
+        self.velocity = PVector(0, 0, random(1, 5))
+
+    def update(self):
+        self.position.add(self.velocity)
+        if self.position.z > 200:
+            self.position.z = -200
+
+    def display(self):
+        fill(255,128)
+        noStroke()
+        pushMatrix()
+        translate(self.position.x, self.position.y, self.position.z)
+        
+        star(0,0,5,10,4)
+        popMatrix()
+def star(x, y, radius1, radius2, npoints):
+    angle = TWO_PI / npoints;
+    halfAngle = angle/2.0;
+    beginShape();
+    a = 0
+    while (a<TWO_PI):
+        sx = x + cos(a) * radius2;
+        sy = y + sin(a) * radius2;
+        vertex(sx, sy);
+        sx = x + cos(a+halfAngle) * radius1;
+        sy = y + sin(a+halfAngle) * radius1;
+        vertex(sx, sy);
+        a+=angle
+    endShape(CLOSE);        
 class MatrixChar:
     def __init__(self, x, y):
         self.x = x
