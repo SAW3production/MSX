@@ -46,7 +46,8 @@ def draw():
     colorMode(HSB)
     background(0)
     pushMatrix()
-    translate(0,0,-100)
+    translate(0,-100,-200)
+    scale(1.2)
     for column in matrix_rain:
         for matrix_char in column:
             matrix_char.display()
@@ -182,7 +183,7 @@ class Star:
         pushMatrix()
         translate(self.position.x, self.position.y, self.position.z)
         
-        star(0,0,5,10,4)
+        star(0,0,5,10,5)
         popMatrix()
 def star(x, y, radius1, radius2, npoints):
     angle = TWO_PI / npoints;
