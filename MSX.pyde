@@ -30,7 +30,6 @@ def setup():
     for i in range(6):
         mind_offsets.append(random(0,250))
     
-    
     for _ in range(200):
         leaves.append(Leaf())
         
@@ -44,7 +43,10 @@ def draw():
     c = 1
     print(timer)
     colorMode(HSB)
-    background(0)
+    if(int(timer)< 0.2 or sin(timer)<-0.2):
+        background(0)
+    
+    #Matrix
     pushMatrix()
     translate(0,-100,-200)
     scale(1.2)
@@ -89,8 +91,6 @@ def draw():
         star.display()
     
     popMatrix()
-    
-    
     
     #wave
     theta += 0.08
@@ -186,19 +186,19 @@ class Star:
         star(0,0,5,10,5)
         popMatrix()
 def star(x, y, radius1, radius2, npoints):
-    angle = TWO_PI / npoints;
-    halfAngle = angle/2.0;
-    beginShape();
+    angle = TWO_PI / npoints
+    halfAngle = angle/2.0
+    beginShape()
     a = 0
     while (a<TWO_PI):
-        sx = x + cos(a) * radius2;
-        sy = y + sin(a) * radius2;
-        vertex(sx, sy);
-        sx = x + cos(a+halfAngle) * radius1;
-        sy = y + sin(a+halfAngle) * radius1;
-        vertex(sx, sy);
+        sx = x + cos(a) * radius2
+        sy = y + sin(a) * radius2
+        vertex(sx, sy)
+        sx = x + cos(a+halfAngle) * radius1
+        sy = y + sin(a+halfAngle) * radius1
+        vertex(sx, sy)
         a+=angle
-    endShape(CLOSE);        
+    endShape(CLOSE)       
 class MatrixChar:
     def __init__(self, x, y):
         self.x = x
