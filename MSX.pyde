@@ -11,7 +11,8 @@ def setup():
     global models,mind_offsets,leaves,characters,matrix_rain
     fullScreen(P3D)
     colorMode(HSB,360,100,100,255)
-       
+    
+    #Ihor's part
     sakura_model = Model("sakura.obj", 425, 450, 0, 30, random(256),PI,0)
     head_model_1 = Model("Head.obj", 400, 700, 0, 10, random(256),PI/2,-PI+PI/4+PI/8)
     head_model_2 = Model("Head.obj", 1500, 800, 20, 10, random(256),PI/2,PI/2)
@@ -35,20 +36,27 @@ def setup():
         
     for _ in range(100):
         stars.append(Star())
+        
+    #Alex's
+    global gates,eagle
+    size(1920,1080,P3D)
+    gates = Model("18370_Shinto-Torii_Gate_v1.obj",500,height/2,0,50,255,PI/2,0)
+    eagle=Model("20433_Bald_Eagle_v1.obj",1500,height/2,0,25,255,PI/2,PI - PI/4)
                
 def draw():
     global models, theta, mind_offsets,timer,leaves,characters,matrix_rain,stars
     timer+=1.0/30.0
-    
+    if(int(timer)< 0.2 or sin(timer)<-0.2):
+            background(0)
     print(timer)
+    lights()
     colorMode(HSB)
     #1 Scene
     if(timer<10):
         
         r = 10
         c = 1
-        if(int(timer)< 0.2 or sin(timer)<-0.2):
-            background(0)
+        
         
         #Matrix
         pushMatrix()
@@ -59,7 +67,7 @@ def draw():
                 matrix_char.display()
                 matrix_char.fall()
         popMatrix()
-        lights()
+        
         strokeWeight(2)
         
         scale(min(timer*0.1+0.1,1))
@@ -117,7 +125,18 @@ def draw():
                 angle += mind_offsets[m+1]*0.01 +0.5;    
     #2 Scene
     if(timer>10 and timer <20):
+        global gates, eagle 
+        pushMatrix()
+        fill(50,10,5)
+        if(not eagle.move_to_center()):
+            eagle.render()
+        popMatrix()
+        pushMatrix()
+        fill(255,0,0)
+        if(not gates.move_to_center()):
+            gates.render()
         
+        popMatrix()
                 
     
 class Model:
@@ -140,6 +159,25 @@ class Model:
         shape(self.sh)
         popMatrix()
         
+    def move_to_center(self):
+        target_x = width / 2
+        target_y = height / 2
+        speed = 2
+         
+        if self.pos.x < target_x:
+            self.pos.x += speed
+        elif self.pos.x > target_x:
+            self.pos.x -= speed
+    
+        if self.pos.y < target_y:
+            self.pos.y += speed
+        elif self.pos.y > target_y:
+            self.pos.y -= speed  
+                    
+        if abs(self.pos.x - target_x) < 2 and abs(self.pos.y - target_y) < 2:
+            return True
+        else:
+            return False
            
 class Leaf:
     def __init__(self):
