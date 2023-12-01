@@ -127,6 +127,14 @@ def draw():
     if(timer>10 and timer <20):
         global gates, eagle 
         pushMatrix()
+        translate(0,-100,-200)
+        scale(1.2)
+        for column in matrix_rain:
+            for matrix_char in column:
+                matrix_char.display()
+                matrix_char.fall()
+        popMatrix()
+        pushMatrix()
         fill(50,10,5)
         if(not eagle.move_to_center()):
             eagle.render()
