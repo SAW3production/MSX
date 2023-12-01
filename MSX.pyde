@@ -1,69 +1,33 @@
-models = []
-mind_offsets = []
-theta = 0
-timer = 0.0
+matrix_rain = []
+characters = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!@#$%^&*()-=_+[]{}|;':,.<>?/ "
 def setup():
-    frameRate(30)
-    global models,mind_offsets
-    size(1920, 1080, P3D)
-    colorMode(HSB,360,100,100,255)
-       
-    sakura_model = Model("sakura.obj", 450, 450, 100, 30, random(256),PI,0)
-    head_model_1 = Model("Head.obj", 400, 700, 0, 10, random(256),PI/2,-PI+PI/4+PI/8)
-    head_model_2 = Model("Head.obj", 1500, 800, 20, 10, random(256),PI/2,0)
-    liberty_model = Model("LibertStatue.obj", 1500, 650, 20, 30, random(256),PI,PI)
-    models.append(sakura_model)
-    models.append(head_model_1)
-    models.append(head_model_2)
-    models.append(liberty_model)
+    global gates,eagle
+    size(1920,1080,P3D)
+    gates = Model("18370_Shinto-Torii_Gate_v1.obj",500,height/2,0,50,255,PI/2,0)
+    eagle=Model("20433_Bald_Eagle_v1.obj",1500,height/2,0,25,255,PI/2,PI - PI/4)
     
-    for i in range(20):
-        mind_offsets.append(random(0,250))
-               
+    #matrix
+    for i in range(-200, width+400, 20):
+        column = []
+        for j in range(0, height*2, 20):
+            column.append(MatrixChar(i, j))
+        matrix_rain.append(column)
+
 def draw():
-    global models, theta, mind_offsets,timer
-    timer+=1.0/30.0
-    print(timer)
-    colorMode(HSB)
     background(0)
     lights()
-    strokeWeight(2)
-    fill(348,28,100,255)
-    noStroke()
-    models[0].render()
-    fill(200,128)
-    noStroke()
-    models[1].render()
-    noFill()
-    stroke(255,128)
-    models[2].render()
-    fill(197,43.3,67.1,255)
-    noStroke()
-    models[3].render()
+    global gates, eagle 
+    pushMatrix()
+    fill(50,10,5)
+    if(not eagle.move_to_center()):
+        eagle.render()
+    popMatrix()
+    pushMatrix()
+    fill(255,0,0)
+    if(not gates.move_to_center()):
+        gates.render()
     
-    
-    
-    #wave
-    theta += 0.08
-    noStroke()
-    fill(255)
-    for m in range(1):
-        angle = theta;
-        
-        for x in range(int(models[1].pos.x),int(models[2].pos.x),20):    
-            y = map(sin(angle), -1, 1, 0,500) + mind_offsets[m]
-            z = map(sin(angle),0,20,0,500)
-            pushMatrix()
-            translate(x,y,z)
-            fill(360,100,100)   
-            sphere(10)
-            popMatrix()
-            cube = Cube(x,y,z,1,255)
-            cube.render()
-              
-            
-            angle += 0.1;    
-            
+    popMatrix()
     
 class Model:
     def __init__(self, file_name, x, y, z, s, h,angleX,angleY):
@@ -83,25 +47,41 @@ class Model:
         
         scale(self.s)        
         shape(self.sh)
-        popMatrix()
+        popMatrix()    
         
-class Cube:
-    def __init__(self,x, y, z, s, h):
-        self.pos = PVector(x, y, z)
-        self.s = s
-        self.h = h
-        self.y = 0
-    def render(self):
-        while(self.y<=100):
-            pushMatrix()
-            translate(self.pos.x, self.pos.y + self.y, self.pos.z)
-            scale(self.s)
-            
-            stroke((self.h + mouseX) % 256, 255, 255)
-            noFill()
-            box(10)
-            popMatrix()
-            self.y+=1
-            
+    def move_to_center(self):
+        target_x = width / 2
+        target_y = height / 2
+        speed = 2
+         
+        if self.pos.x < target_x:
+            self.pos.x += speed
+        elif self.pos.x > target_x:
+            self.pos.x -= speed
+    
+        if self.pos.y < target_y:
+            self.pos.y += speed
+        elif self.pos.y > target_y:
+            self.pos.y -= speed  
                     
-        
+        if abs(self.pos.x - target_x) < 2 and abs(self.pos.y - target_y) < 2:
+            return True
+        else:
+            return False
+class MatrixChar:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+        self.speed = random(1, 5)
+        self.value = characters[int(random(len(characters)))]
+
+    def fall(self):
+        self.y = (self.y + self.speed) % height
+        if random(1) < 0.01: 
+            self.value = characters[int(random(len(characters)))]
+
+    def display(self):
+        fill(255, 255, 30,128)
+        noStroke()
+        textSize(20)
+        text(self.value, self.x, self.y)
