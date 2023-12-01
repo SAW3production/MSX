@@ -9,7 +9,7 @@ matrix_rain = []
 def setup():
     frameRate(30)
     global models,mind_offsets,leaves,characters,matrix_rain
-    size(1920, 1080, P3D)
+    fullScreen(P3D)
     colorMode(HSB,360,100,100,255)
        
     sakura_model = Model("sakura.obj", 425, 450, 0, 30, random(256),PI,0)
@@ -39,79 +39,86 @@ def setup():
 def draw():
     global models, theta, mind_offsets,timer,leaves,characters,matrix_rain,stars
     timer+=1.0/30.0
-    r = 10
-    c = 1
+    
     print(timer)
     colorMode(HSB)
-    if(int(timer)< 0.2 or sin(timer)<-0.2):
-        background(0)
-    
-    #Matrix
-    pushMatrix()
-    translate(0,-100,-200)
-    scale(1.2)
-    for column in matrix_rain:
-        for matrix_char in column:
-            matrix_char.display()
-            matrix_char.fall()
-    popMatrix()
-    lights()
-    strokeWeight(2)
-    
-    scale(min(timer*0.1+0.1,1))
-    
-    #1 head
-    pushMatrix()
-    rotateY(sin(timer)*0.1)
-    fill(348,28,100,255)
-    noStroke()
-    models[0].render()
-    fill(200,128)
-    noStroke()
-    models[1].render()
-    translate(400,300)
-    for leaf in leaves:
-        leaf.update()
-        leaf.display()
-    popMatrix()
-    
-    #2 head
-    pushMatrix()
-    
-    rotateY(sin(timer-10.5)*0.01)
-    fill(197,43.3,67.1,255)
-    noStroke()
-    models[2].render()
-    fill(200,128)
-    noStroke()
-    models[3].render()
-    translate(1450,450)
-    for star in stars:
-        star.update()
-        star.display()
-    
-    popMatrix()
-    
-    #wave
-    theta += 0.08
-    noStroke()
-    fill(255)
-    for m in range(5):
-        angle = theta;
+    #1 Scene
+    if(timer<10):
         
-        for x in range(int(models[1].pos.x),int(models[2].pos.x)+50,20):    
-            y = map(sin(angle), -0.5, 0.5, 220,250) + mind_offsets[m]
-            transparency = map(cos(angle),0,1,0,255)
-            z = map(sin(angle),0,20,0,500)
-            pushMatrix()
-            translate(x,y,z)
-            fill(200,255,255,transparency)   
-            sphere(random(5,10))
-            popMatrix()
-              
+        r = 10
+        c = 1
+        if(int(timer)< 0.2 or sin(timer)<-0.2):
+            background(0)
+        
+        #Matrix
+        pushMatrix()
+        translate(0,-100,-200)
+        scale(1.2)
+        for column in matrix_rain:
+            for matrix_char in column:
+                matrix_char.display()
+                matrix_char.fall()
+        popMatrix()
+        lights()
+        strokeWeight(2)
+        
+        scale(min(timer*0.1+0.1,1))
+        
+        #1 head
+        pushMatrix()
+        rotateY(sin(timer)*0.1)
+        fill(348,28,100,255)
+        noStroke()
+        models[0].render()
+        fill(200,128)
+        noStroke()
+        models[1].render()
+        translate(400,300)
+        for leaf in leaves:
+            leaf.update()
+            leaf.display()
+        popMatrix()
+        
+        #2 head
+        pushMatrix()
+        
+        rotateY(sin(timer-10.5)*0.01)
+        fill(197,43.3,67.1,255)
+        noStroke()
+        models[2].render()
+        fill(200,128)
+        noStroke()
+        models[3].render()
+        translate(1450,450)
+        for star in stars:
+            star.update()
+            star.display()
+        
+        popMatrix()
+        
+        #wave
+        theta += 0.08
+        noStroke()
+        fill(255)
+        for m in range(5):
+            angle = theta;
             
-            angle += mind_offsets[m+1]*0.01 +0.5;    
-            
+            for x in range(int(models[1].pos.x),int(models[2].pos.x)+50,20):    
+                y = map(sin(angle), -0.5, 0.5, 220,250) + mind_offsets[m]
+                transparency = map(cos(angle),0,1,0,255)
+                z = map(sin(angle),0,20,0,500)
+                pushMatrix()
+                translate(x,y,z)
+                fill(200,255,255,transparency)   
+                sphere(random(5,10))
+                popMatrix()
+                
+                
+                angle += mind_offsets[m+1]*0.01 +0.5;    
+    #2 Scene
+    if(timer>10 and timer <20):
+        
+                
     
 class Model:
     def __init__(self, file_name, x, y, z, s, h,angleX,angleY):
