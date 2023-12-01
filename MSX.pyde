@@ -41,7 +41,7 @@ def setup():
     global gates,eagle
     size(1920,1080,P3D)
     gates = Model("18370_Shinto-Torii_Gate_v1.obj",500,height/2,0,50,255,PI/2,0)
-    eagle=Model("20433_Bald_Eagle_v1.obj",1500,height/2,0,25,255,PI/2,PI - PI/4)
+    eagle=Model("20433_Bald_Eagle_v1.obj",1420,height/2,0,25,255,PI/2,PI - PI/4)
                
 def draw():
     global models, theta, mind_offsets,timer,leaves,characters,matrix_rain,stars
@@ -135,12 +135,12 @@ def draw():
                 matrix_char.fall()
         popMatrix()
         pushMatrix()
-        fill(50,10,5)
+        fill(20,70,60)
         if(not eagle.move_to_center()):
             eagle.render()
         popMatrix()
         pushMatrix()
-        fill(255,0,0)
+        fill(0,100,100)
         if(not gates.move_to_center()):
             gates.render()
         
