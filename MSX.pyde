@@ -73,7 +73,7 @@ def draw():
     lights()
     colorMode(HSB)
     #1 Scene
-    if(timer<10):
+    if(timer<15):
         
         r = 10
         c = 1
@@ -145,7 +145,7 @@ def draw():
                 
                 angle += mind_offsets[m+1]*0.01 +0.5;    
     #2 Scene
-    if(timer>10 and timer <17):
+    if(timer>15 and timer <22):
         global gates, eagle 
         pushMatrix()
         translate(0,-100,-200)
@@ -168,7 +168,7 @@ def draw():
         popMatrix()
         
     #Scene 3
-    if(timer>17):
+    if(timer>22):
         strokeWeight(5)
         translate(width / 2, height / 2)
         
